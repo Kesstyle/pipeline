@@ -1,0 +1,19 @@
+def changeLog = "$projectDir/src/main/resources/master.xml"
+def changeLogTest = "$projectDir/src/main/resources/masterTest.xml"
+
+liquibase {
+    activities {
+        main {
+            changeLogFile changeLog
+            url "$liquibaseEventUrl"
+            username "$liquibaseEventUser"
+            password "$liquibaseEventPassword"
+        }
+        test {
+            changeLogFile changeLogTest
+            url "$liquibaseEventUrl"
+            username "$liquibaseEventUser"
+            password "$liquibaseEventPassword"
+        }
+    }
+}
