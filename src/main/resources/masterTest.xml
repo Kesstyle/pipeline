@@ -3,7 +3,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
-    <changeSet author="kes" id="22346773">
+    <changeSet author="kes" id="22346775">
         <preConditions onFail="CONTINUE">
             <not><tableExists schemaName="public" tableName="event222" /></not>
         </preConditions>

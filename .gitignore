@@ -25,4 +25,5 @@
 /nbdist/
 /.nb-gradle/
 
-gradle.properties
+db.properties
+generated

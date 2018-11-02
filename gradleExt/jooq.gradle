@@ -1,0 +1,39 @@
+ext.dbProps = new Properties()
+InputStream is = new FileInputStream("src/main/resources/db.properties")
+dbProps.load(is)
+
+
+jooq {
+    csmart(sourceSets.main) {
+        jdbc {
+            driver = 'org.postgresql.Driver'
+            url = dbProps['event.url']
+            username = dbProps['event.user']
+            password = dbProps['event.password']
+            schema = 'public'
+        }
+        generator {
+            name = 'org.jooq.codegen.DefaultGenerator'
+            strategy {
+                name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+            }
+            database {
+                name = 'org.jooq.meta.postgres.PostgresDatabase'
+                inputSchema = 'public'
+            }
+            generate {
+                relations = true
+                deprecated = false
+                records = true
+                immutablePojos = false
+                fluentSetters = true
+            }
+            target {
+                packageName = 'by.minsk.kes.jooq.persistence'
+                directory = 'src/main/generated/java'
+            }
+        }
+    }
+}
+
+generateCsmartJooqSchemaSource.dependsOn update
