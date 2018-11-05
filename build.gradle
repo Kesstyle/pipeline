@@ -41,8 +41,10 @@ dependencies {
 //	implementation('org.springframework.boot:spring-boot-starter-jooq')
 	compile (group: 'org.jooq', name: 'jooq-meta', version: '3.11.5')
 	compile (group: 'org.jooq', name: 'jooq-codegen', version: '3.11.5')
+	compile group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.0'
+	compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
 
-	implementation('org.springframework.boot:spring-boot-starter-web')
+	implementation('org.springframework.boot:spring-boot-starter-webflux')
 	implementation('org.liquibase:liquibase-core')
 	jooqRuntime 'org.postgresql:postgresql:42.2.5.jre7'
 	testImplementation('org.springframework.boot:spring-boot-starter-test')

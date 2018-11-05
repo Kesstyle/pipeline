@@ -36,4 +36,8 @@ jooq {
     }
 }
 
+clean.doLast {
+    file('src/main/generated').deleteDir()
+}
+
 generateCsmartJooqSchemaSource.dependsOn update

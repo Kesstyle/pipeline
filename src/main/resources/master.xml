@@ -3,7 +3,14 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
-    <changeSet author="kes" id="17">
+    <changeSet id="kes" author="d31">
+        <preConditions onFail="CONTINUE">
+            <tableExists schemaName="public" tableName="event" />
+        </preConditions>
+        <dropTable tableName="event"/>
+    </changeSet>
+
+    <changeSet author="kes" id="c30">
         <preConditions onFail="CONTINUE">
             <not><tableExists schemaName="public" tableName="event" /></not>
         </preConditions>
@@ -12,7 +19,7 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="VARCHAR(50)"/>
-            <column name="date" type="VARCHAR(15)"/>
+            <column name="date" type="TIMESTAMP"/>
             <column name="type" type="INT">
                 <constraints nullable="false"/>
             </column>
@@ -20,11 +27,35 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    </changeSet>
+
+    <changeSet author="kes" id="i30">
+        <preConditions onFail="CONTINUE">
+            <tableExists schemaName="public" tableName="event" />
+        </preConditions>
         <insert schemaName="public" tableName="event">
-            <column name="name" value="liquibase with log4jdbc"/>
-            <column name="date" value="to_date('2018-11-01', 'YYYY-MM-DD')"/>
+            <column name="name" value="introduce dao with jooq"/>
+            <column name="date" valueComputed="to_timestamp('2018-11-05 10:44:55', 'yyyy-MM-dd hh24:mi:ss')"/>
             <column name="type" value="1"/>
             <column name="outcome" value="1"/>
+        </insert>
+        <insert schemaName="public" tableName="event">
+            <column name="name" value="introduce Spring WebFlux"/>
+            <column name="date" valueComputed="to_timestamp('2018-11-05 14:34:22', 'yyyy-MM-dd hh24:mi:ss')"/>
+            <column name="type" value="0"/>
+            <column name="outcome" value="0"/>
+        </insert>
+        <insert schemaName="public" tableName="event">
+            <column name="name" value="test WebFlux"/>
+            <column name="date" valueComputed="to_timestamp('2018-11-05 14:55:22', 'yyyy-MM-dd hh24:mi:ss')"/>
+            <column name="type" value="0"/>
+            <column name="outcome" value="0"/>
+        </insert>
+        <insert schemaName="public" tableName="event">
+            <column name="name" value="Try liquibase, jooq and Spring WebFlux together"/>
+            <column name="date" valueComputed="to_timestamp('2018-11-05 16:50:22', 'yyyy-MM-dd hh24:mi:ss')"/>
+            <column name="type" value="0"/>
+            <column name="outcome" value="0"/>
         </insert>
     </changeSet>
 
