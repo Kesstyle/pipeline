@@ -39,13 +39,11 @@ public class ContextProvider {
 
     private DataSource dataSource;
 
-    public DSLContext getContext() {
-        final Connection connection = getConnection();
-        final DSLContext ctx = DSL.using(connection, POSTGRES_10);
-        return ctx;
+    public DSLContext getContext(final Connection connection) {
+        return DSL.using(connection, POSTGRES_10);
     }
 
-    private Connection getConnection() {
+    public Connection getConnection() {
         try {
             return getDataSource().getConnection();
         } catch (final SQLException e) {

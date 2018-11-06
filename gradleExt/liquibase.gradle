@@ -2,19 +2,13 @@ def changeLog = "$projectDir/src/main/resources/master.xml"
 def changeLogTest = "$projectDir/src/main/resources/masterTest.xml"
 
 ext.dbProps = new Properties()
-InputStream is = new FileInputStream("src/main/resources/db.properties")
+InputStream is = new FileInputStream("src/main/resources/liquibase-db.properties")
 dbProps.load(is)
 
 liquibase {
     activities {
         main {
             changeLogFile changeLog
-            url dbProps['event.url']
-            username dbProps['event.user']
-            password dbProps['event.password']
-        }
-        test {
-            changeLogFile changeLogTest
             url dbProps['event.url']
             username dbProps['event.user']
             password dbProps['event.password']

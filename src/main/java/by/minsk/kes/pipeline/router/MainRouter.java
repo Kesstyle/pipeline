@@ -15,6 +15,9 @@ public class MainRouter {
     @Bean
     public RouterFunction<ServerResponse> routes(final EventHandler eventHandler) {
         return RouterFunctions.route(GET("/api/ping"), eventHandler::ping)
-                .andRoute(GET("/api/event/all"), eventHandler::getAllEvents);
+                .andRoute(GET("/api/event/all"), eventHandler::getAllEvents)
+                .andRoute(GET("/api/numbers"), eventHandler::getRandomNumbers)
+                .andRoute(GET("/api/start"), eventHandler::startStream)
+                .andRoute(GET("/api/date"), eventHandler::infiniteTime);
     }
 }

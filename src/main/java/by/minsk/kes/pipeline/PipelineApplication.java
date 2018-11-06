@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 
 @SpringBootApplication
@@ -20,7 +19,7 @@ public class PipelineApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PipelineApplication.class, args);
 	}
-
+//
 //	@Bean
 //	WebClient getWebClient() {
 //		return WebClient.create("http://localhost:5001");
@@ -29,7 +28,7 @@ public class PipelineApplication {
 //	CommandLineRunner demo(WebClient client) {
 //		return args -> {
 //			client.get()
-//					.uri("/temperatures")
+//					.uri("/api/numbers")
 //					.accept(MediaType.TEXT_EVENT_STREAM)
 //					.retrieve()
 //					.bodyToFlux(Integer.class)
@@ -39,7 +38,7 @@ public class PipelineApplication {
 //					})
 //					.map(s -> String.valueOf(s))
 //					.subscribe(msg -> {
-//						LOG.info(msg);
+//						System.out.println(msg);
 //					});
 //		};
 //	}

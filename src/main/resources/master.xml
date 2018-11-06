@@ -3,14 +3,14 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
-    <changeSet id="kes" author="d31">
+    <changeSet id="kes" author="d33">
         <preConditions onFail="CONTINUE">
             <tableExists schemaName="public" tableName="event" />
         </preConditions>
         <dropTable tableName="event"/>
     </changeSet>
 
-    <changeSet author="kes" id="c30">
+    <changeSet author="kes" id="c35">
         <preConditions onFail="CONTINUE">
             <not><tableExists schemaName="public" tableName="event" /></not>
         </preConditions>
@@ -29,7 +29,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="kes" id="i30">
+    <changeSet author="kes" id="i35">
         <preConditions onFail="CONTINUE">
             <tableExists schemaName="public" tableName="event" />
         </preConditions>

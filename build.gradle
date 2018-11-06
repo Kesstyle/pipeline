@@ -67,11 +67,6 @@ task ('tableMain') << {
 	}
 }
 
-task ('tableTest') << {
-	liquibase {
-		runList = 'test'
-	}
-}
 
 
 

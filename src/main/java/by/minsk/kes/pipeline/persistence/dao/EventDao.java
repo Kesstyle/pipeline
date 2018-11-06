@@ -6,6 +6,8 @@ import org.jooq.impl.TableImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 
 import static by.minsk.kes.jooq.persistence.Tables.EVENT;
@@ -23,11 +25,15 @@ public class EventDao extends CommonDao {
     }
 
     public void insert(final KesEvent kesEvent) {
-        getContext().insertInto(EVENT)
-                .set(EVENT.NAME, kesEvent.getName())
-                .set(EVENT.DATE, Timestamp.valueOf(kesEvent.getDate()))
-                .set(EVENT.TYPE, kesEvent.getKesEventType().getId())
-                .set(EVENT.OUTCOME, kesEvent.getKesEventOutcomeType().getId())
-                .execute();
+        try (final Connection connection = getConnection()) {
+            getContext(connection).insertInto(EVENT)
+                    .set(EVENT.NAME, kesEvent.getName())
+                    .set(EVENT.DATE, Timestamp.valueOf(kesEvent.getDate()))
+                    .set(EVENT.TYPE, kesEvent.getKesEventType().getId())
+                    .set(EVENT.OUTCOME, kesEvent.getKesEventOutcomeType().getId())
+                    .execute();
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
