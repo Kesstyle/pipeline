@@ -26,4 +26,5 @@
 /.nb-gradle/
 
 db.properties
+liquibase-db.properties
 generated
