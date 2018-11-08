@@ -15,6 +15,9 @@ public abstract class AbstractConverter<T> {
     public abstract T convertFromDB(final Record record);
 
     public List<T> convertIterableFromDB(final Iterable<Record> records) {
+        if (records == null) {
+            return null;
+        }
         return StreamSupport.stream(records.spliterator(), false).map(this::convertFromDB).collect(Collectors.toList());
     }
 

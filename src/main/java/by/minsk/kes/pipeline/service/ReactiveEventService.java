@@ -1,68 +1,56 @@
 package by.minsk.kes.pipeline.service;
 
 import by.minsk.kes.pipeline.domain.KesEvent;
+import by.minsk.kes.pipeline.listener.KesListener;
 import by.minsk.kes.pipeline.persistence.dao.EventDao;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import reactor.core.publisher.ConnectableFlux;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 import reactor.core.publisher.Mono;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.IntStream;
 
 @Component
 public class ReactiveEventService {
 
-    @Autowired
-    private EventDao eventDao;
+  @Autowired
+  private EventDao eventDao;
 
-    private ConnectableFlux<Integer> fluxStream;
+  private Flux<KesEvent> kesEventFlux;
 
-    public Flux<KesEvent> getAllEvents() {
-        return Flux.interval(Duration.ofSeconds(1)).fromIterable(eventDao.selectAll());
+  public Flux<KesEvent> getAllEventsInf() {
+    if (kesEventFlux == null) {
+      kesEventFlux = Flux.create(emitter -> {
+            final KesListener<KesEvent> listener = event -> emitter.next(event);
+            eventDao.registerListener(listener);
+          }, FluxSink.OverflowStrategy.BUFFER);
+//          .map(t -> {
+//        final List<KesEvent> events = eventDao.selectAll();
+//        int i = new Random().nextInt(100) % events.size();
+//        return events.get(i);
+//      });
     }
+    return kesEventFlux;
+  }
 
-    public Flux<LocalDateTime> infiniteFluxDate() {
-        return Flux.interval(Duration.ofSeconds(1))
-                .map(t -> LocalDateTime.now()).onErrorResume(e -> {
-                    e.printStackTrace();
-                    return Flux.just(LocalDateTime.now());
-                });
-    }
+  public Mono<Void> insertEvent(final Mono<KesEvent> event) {
+    return event.map(e -> {
+      eventDao.insert(e);
+      return 1;
+    }).onErrorResume(ex -> Mono.just(-1)).then();
+  }
 
-    public ConnectableFlux<Integer> getInfiniteNumbers() {
-        fluxStream = Flux.create(fluxSink -> {
-            for (int i =0; i < Integer.MAX_VALUE; i++) {
-                int j = new Random().nextInt(1000);
-                fluxSink.next(new Random().nextInt(1000));
-                System.out.println("Next is " + j);
-            }
-        }, FluxSink.OverflowStrategy.LATEST).map(o -> (Integer) o).sample(Duration.ofMillis(10))
-                .doOnSubscribe(s -> System.out.println("Subscribed!"))
-                .doOnNext(s -> System.out.println("Next returned is " + s))
-                .doOnComplete(() -> System.out.println("Complete!"))
-                .publish();
-        return fluxStream;
-    }
-
-    public void startStream() {
-        fluxStream.connect();
-    }
-
-    public Flux<KesEvent> getAllEventsInf() {
-        return Flux.interval(Duration.ofSeconds(1)).map(t -> {
-            int i = new Random().nextInt(100)%4;
-            return (KesEvent)eventDao.selectAll().get(i);
-        });
-    }
-
-    public Mono<Void> insertEvent(final Mono<KesEvent> event) {
-        event.subscribe(e -> eventDao.insert(e));
-        return Mono.empty().then();
-    }
+  public Mono<Void> insertEventBatch(final Flux<KesEvent> events) {
+    final List<KesEvent> eventList = new ArrayList<>();
+    return events.map(e -> {
+      eventList.add(e);
+      return 1;
+    }).onErrorResume(ex -> Mono.just(-1))
+        .doOnComplete(() -> eventDao.insertBatch(eventList)).then();
+  }
 }

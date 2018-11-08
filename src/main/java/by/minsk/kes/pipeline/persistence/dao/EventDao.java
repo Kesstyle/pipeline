@@ -1,39 +1,91 @@
 package by.minsk.kes.pipeline.persistence.dao;
 
+import static by.minsk.kes.jooq.persistence.Tables.EVENT;
+
 import by.minsk.kes.pipeline.domain.KesEvent;
 import by.minsk.kes.pipeline.persistence.converter.EventConverter;
+
+import org.jooq.DSLContext;
+import org.jooq.InsertSetMoreStep;
+import org.jooq.Record;
 import org.jooq.impl.TableImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-
-import static by.minsk.kes.jooq.persistence.Tables.EVENT;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
-public class EventDao extends CommonDao {
+public class EventDao extends CommonDao<KesEvent> {
 
-    protected TableImpl getTable() {
-        return EVENT;
-    }
+  private static final Logger LOG = LoggerFactory.getLogger(EventDao.class);
 
-    @Autowired
-    protected void setConverter(final EventConverter converter) {
-        this.converter = converter;
-    }
+  protected TableImpl getTable() {
+    return EVENT;
+  }
 
-    public void insert(final KesEvent kesEvent) {
-        try (final Connection connection = getConnection()) {
-            getContext(connection).insertInto(EVENT)
-                    .set(EVENT.NAME, kesEvent.getName())
-                    .set(EVENT.DATE, Timestamp.valueOf(kesEvent.getDate()))
-                    .set(EVENT.TYPE, kesEvent.getKesEventType().getId())
-                    .set(EVENT.OUTCOME, kesEvent.getKesEventOutcomeType().getId())
-                    .execute();
-        } catch (final SQLException e) {
-            e.printStackTrace();
-        }
+  @Autowired
+  protected void setConverter(final EventConverter converter) {
+    this.converter = converter;
+  }
+
+  public List<KesEvent> selectLatestEvents(final Long id) {
+    return converter.convertIterableFromDB(selectWithIdAfterGiven(id));
+  }
+
+  public void insert(final KesEvent kesEvent) {
+    try (final Connection connection = getConnection();
+         final DSLContext insert = getContext(connection);) {
+      insertEvent(kesEvent, insert).execute();
+      listeners.stream().forEach(l -> l.insertListener(kesEvent));
+    } catch (final SQLException e) {
+      throwError(e);
     }
+  }
+
+  public void insertBatch(final Collection<KesEvent> kesEventList) {
+    try (final Connection connection = getConnection();
+         final DSLContext insert = getContext(connection)) {
+      insert.batch(kesEventList.stream()
+          .map(event -> insertEvent(event, insert)).collect(Collectors.toList())).execute();
+    } catch (final SQLException e) {
+      throwError(e);
+    }
+  }
+
+  private InsertSetMoreStep insertEvent(final KesEvent kesEvent, final DSLContext insert) {
+    return insert.insertInto(EVENT)
+        .set(EVENT.NAME, kesEvent.getName())
+        .set(EVENT.DATE, Timestamp.valueOf(LocalDateTime.now()))
+        .set(EVENT.TYPE, kesEvent.getKesEventType().getId())
+        .set(EVENT.OUTCOME, kesEvent.getKesEventOutcomeType().getId());
+  }
+
+  private Iterable<Record> selectWithIdAfterGiven(final Long id) {
+    if (id == null) {
+      return selectAllRecords();
+    }
+    try (final Connection connection = getConnection();
+         final DSLContext context = getContext(connection)) {
+      return context.select().from(getTable())
+          .having(EVENT.ID.gt(id))
+          .fetch();
+    } catch (final SQLException e) {
+      e.printStackTrace();
+    }
+    return Arrays.asList();
+  }
+
+  private void throwError(final Throwable e) {
+    LOG.error("Error during call to DB: ", e);
+    throw new RuntimeException(e);
+  }
 }
