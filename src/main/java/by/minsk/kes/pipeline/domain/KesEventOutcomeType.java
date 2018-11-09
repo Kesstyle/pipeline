@@ -1,7 +1,7 @@
 package by.minsk.kes.pipeline.domain;
 
 public enum KesEventOutcomeType {
-    SUCCESS(0), FAILURE(1), CANCELLED(2), POSTPONED(3);
+        SUCCESS(0), FAILURE(1), CANCELLED(2), POSTPONED(3);
 
     private int id;
 
