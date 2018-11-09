@@ -21,7 +21,7 @@ public class ReactiveEventService {
     public Flux<KesEvent> getAllEventsInf() {
         final Flux<KesEvent> existing = Flux.fromIterable(eventDao.selectAll());
         return existing.mergeWith(Flux.create(emitter -> {
-            final KesListener<KesEvent> listener = event -> emitter.next(event);
+            final KesListener<KesEvent> listener = emitter::next;
             eventDao.registerListener(listener);
         }, FluxSink.OverflowStrategy.BUFFER));
     }

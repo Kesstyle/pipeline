@@ -119,4 +119,65 @@
         </insert>
     </changeSet>
 
+    <changeSet author="kes" id="users17">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists schemaName="public" tableName="users" /></not>
+        </preConditions>
+        <createTable tableName="users">
+            <column autoIncrement="true" name="id" type="BIGINT" startWith="4">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="VARCHAR(5)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <insert schemaName="public" tableName="users">
+            <column name="id" value="1"/>
+            <column name="name" value="Kes_style"/>
+            <column name="email" value="kess@test.epam.com"/>
+            <column name="token" value="kes123111abc"/>
+            <column name="active" value="Y"/>
+        </insert>
+        <insert schemaName="public" tableName="users">
+            <column name="id" value="2"/>
+            <column name="name" value="Kufufu"/>
+            <column name="email" value="kufufu@test.epam.com"/>
+            <column name="token" value="kufufu123111abc"/>
+            <column name="active" value="Y"/>
+        </insert>
+        <insert schemaName="public" tableName="users">
+            <column name="id" value="3"/>
+            <column name="name" value="Tarkka"/>
+            <column name="email" value="tarkka@test.epam.com"/>
+            <column name="token" value="tarkka123111abc"/>
+            <column name="active" value="Y"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="kes" id="usersid17">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists schemaName="public" tableName="user_watches" /></not>
+        </preConditions>
+        <createTable tableName="user_watches">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="userid" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_read_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>
