@@ -3,7 +3,7 @@ package by.minsk.kes.pipeline.domain;
 public enum KesEventType {
     GENERIC(0), URGENT(1), REACTION(2);
 
-    private int id;
+    private final int id;
 
     KesEventType(final int id) {
         this.id = id;

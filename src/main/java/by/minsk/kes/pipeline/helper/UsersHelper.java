@@ -16,14 +16,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Component
 public class UsersHelper {
 
-  private Map<String, Long> latestWatchedIds = new ConcurrentHashMap<>();
-  private List<KesListener<Map<String, Long>>> listeners = new ArrayList<>();
-  private Semaphore semaphore = new Semaphore(1);
+  private final Map<String, Long> latestWatchedIds = new ConcurrentHashMap<>();
+  private final List<KesListener<Map<String, Long>>> listeners = new ArrayList<>();
+  private final Semaphore semaphore = new Semaphore(1);
 
   @Value("${user.events.db.batch:7}")
   private int batchSize;
 
-  private AtomicInteger updatesCount = new AtomicInteger(0);
+  private final AtomicInteger updatesCount = new AtomicInteger(0);
 
   public void addIdUpdate(final String token, final Long id) {
     addEntry(token, id);

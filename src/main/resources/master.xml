@@ -119,7 +119,7 @@
         </insert>
     </changeSet>
 
-    <changeSet author="kes" id="users17">
+    <changeSet author="kes" id="users18">
         <preConditions onFail="CONTINUE">
             <not><tableExists schemaName="public" tableName="users" /></not>
         </preConditions>
@@ -140,6 +140,12 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+        <createIndex indexName="email_users_index"
+                     schemaName="public"
+                     tableName="users"
+                     unique="true">
+            <column name="email" type="varchar(50)"/>
+        </createIndex>
         <insert schemaName="public" tableName="users">
             <column name="id" value="1"/>
             <column name="name" value="Kes_style"/>

@@ -21,13 +21,13 @@ public class FluxController {
     private EventDao eventDao;
 
     @PostMapping(path = "/api/test2")
-    public Mono<Void> justTest(@RequestBody TestDomain testDomain) {
+    public Mono<Void> justTest(@RequestBody final TestDomain testDomain) {
         System.out.println(testDomain.getName());
         return Mono.empty().then();
     }
 
     @PostMapping(path = "/api/insert2")
-    public Mono<Void> insert(@RequestBody KesEvent testDomain) {
+    public Mono<Void> insert(@RequestBody final KesEvent testDomain) {
         System.out.println(testDomain.getName());
         return Mono.empty().then();
     }

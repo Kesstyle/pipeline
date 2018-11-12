@@ -85,7 +85,7 @@ public class EventDao extends CommonDao<KesEvent> {
                     .and(EVENT.TYPE.eq(eventType))
                     .and(EVENT.OUTCOME.eq(outcome))
                     .fetch();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             e.printStackTrace();
         }
         return null;
