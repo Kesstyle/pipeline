@@ -1,4 +1,4 @@
-package by.minsk.kes.pipeline.persistence.dao;
+package by.minsk.kes.pipeline.persistence.dao.jooq;
 
 import static by.minsk.kes.jooq.persistence.Tables.EVENT;
 
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class EventDao extends CommonDao<KesEvent> {
+public class EventDao extends CommonJooqDao<KesEvent> {
 
     private static final Logger LOG = LoggerFactory.getLogger(EventDao.class);
 

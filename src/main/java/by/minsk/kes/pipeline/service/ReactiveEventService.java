@@ -1,14 +1,17 @@
 package by.minsk.kes.pipeline.service;
 
 import by.minsk.kes.pipeline.domain.KesEvent;
+import by.minsk.kes.pipeline.domain.User;
 import by.minsk.kes.pipeline.listener.KesListener;
-import by.minsk.kes.pipeline.persistence.dao.EventDao;
+import by.minsk.kes.pipeline.persistence.dao.hibernate.UsersDao;
+import by.minsk.kes.pipeline.persistence.dao.jooq.EventDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 

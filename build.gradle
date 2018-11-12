@@ -43,6 +43,9 @@ dependencies {
 	compile (group: 'org.jooq', name: 'jooq-codegen', version: '3.11.5')
 	compile group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.0'
 	compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
+	compile group: 'org.hibernate', name: 'hibernate-core', version: '5.3.7.Final'
+	compile group: 'org.springframework', name: 'spring-orm', version: '5.1.2.RELEASE'
+	compile group: 'org.springframework', name: 'spring-jdbc', version: '5.1.2.RELEASE'
 
 	implementation('org.springframework.boot:spring-boot-starter-webflux')
 	implementation('org.liquibase:liquibase-core')

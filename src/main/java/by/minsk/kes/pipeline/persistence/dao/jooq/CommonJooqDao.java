@@ -1,4 +1,4 @@
-package by.minsk.kes.pipeline.persistence.dao;
+package by.minsk.kes.pipeline.persistence.dao.jooq;
 
 import by.minsk.kes.pipeline.listener.KesListener;
 import by.minsk.kes.pipeline.persistence.ContextProvider;
@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public abstract class CommonDao<T> {
+public abstract class CommonJooqDao<T> {
 
   @Autowired
   protected ContextProvider provider;

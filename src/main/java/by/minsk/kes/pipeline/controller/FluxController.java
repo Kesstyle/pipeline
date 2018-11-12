@@ -2,7 +2,7 @@ package by.minsk.kes.pipeline.controller;
 
 import by.minsk.kes.pipeline.domain.KesEvent;
 import by.minsk.kes.pipeline.domain.TestDomain;
-import by.minsk.kes.pipeline.persistence.dao.EventDao;
+import by.minsk.kes.pipeline.persistence.dao.jooq.EventDao;
 import reactor.core.publisher.Mono;
 
 import org.slf4j.Logger;
