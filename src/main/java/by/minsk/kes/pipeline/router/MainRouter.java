@@ -25,6 +25,8 @@ public class MainRouter {
 //                .andRoute(POST("/api/test"), eventHandler::justTest);
         .andRoute(POST("/api/event"), eventHandler::insertEvent)
         .andRoute(POST("/api/events"), eventHandler::insertEvents)
-        .andRoute(GET("/api/users"), usersHandler::getAllUsers);
+        .andRoute(GET("/api/users"), usersHandler::getAllUsers)
+        .andRoute(GET("/api/user"), usersHandler::getUserByToken)
+        .andRoute(POST("/api/user"), usersHandler::insertUser);
   }
 }

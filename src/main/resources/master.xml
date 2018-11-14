@@ -186,4 +186,24 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="useq18" author="kes">
+        <preConditions onFail="CONTINUE">
+            <not><sequenceExists sequenceName="users_counter_seq" schemaName="public"/></not>
+        </preConditions>
+        <createSequence sequenceName="users_counter_seq"
+                        schemaName="public"
+                        maxValue="1000000"
+                        minValue="10"
+                        startValue="10"/>
+    </changeSet>
+
+    <changeSet id="alter2" author="kes">
+        <preConditions onFail="CONTINUE">
+            <tableExists schemaName="public" tableName="users" />
+        </preConditions>
+        <addDefaultValue schemaName="public" tableName="users" columnName="active"
+                         defaultValue="N"/>
+        <dropNotNullConstraint schemaName="public" tableName="users" columnName="active"/>
+    </changeSet>
+
 </databaseChangeLog>

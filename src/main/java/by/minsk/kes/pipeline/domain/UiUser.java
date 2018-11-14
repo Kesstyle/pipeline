@@ -2,35 +2,20 @@ package by.minsk.kes.pipeline.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+public class UiUser {
 
-@Entity
-@Table(schema = "public", name = "users")
-public class User {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
   @JsonProperty
   private Long id;
 
-  @Column
   @JsonProperty
   private String name;
 
-  @Column
   @JsonProperty
   private String email;
 
-  @Column
   @JsonProperty
   private String token;
 
-  @Column
   @JsonProperty
   private boolean active;
 
@@ -72,5 +57,6 @@ public class User {
 
   public void setActive(final boolean active) {
     this.active = active;
+
   }
 }

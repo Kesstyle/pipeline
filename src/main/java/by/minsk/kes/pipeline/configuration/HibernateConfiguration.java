@@ -71,7 +71,7 @@ public class HibernateConfiguration {
   public LocalSessionFactoryBean sessionFactory() {
     final LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
     sessionFactory.setDataSource(getDataSource());
-    sessionFactory.setPackagesToScan("by.minsk.kes.pipeline.domain");
+    sessionFactory.setPackagesToScan("by.minsk.kes.pipeline.domain.persistence");
     sessionFactory.setHibernateProperties(getHibernateProperties());
 
     return sessionFactory;
