@@ -1,9 +1,8 @@
 package by.minsk.kes.pipeline.persistence.dao.jooq;
 
-import by.minsk.kes.pipeline.listener.KesListener;
 import by.minsk.kes.pipeline.persistence.ContextProvider;
-import by.minsk.kes.pipeline.persistence.converter.AbstractConverter;
-
+import by.minsk.kes.pipeline.persistence.converter.AbstractJooqConverter;
+import by.minsk.kes.pipeline.persistence.dao.CommonDao;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.impl.TableImpl;
@@ -12,26 +11,20 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @Component
-public abstract class CommonJooqDao<T> {
+public abstract class CommonJooqDao<T> extends CommonDao<T> {
 
   @Autowired
   protected ContextProvider provider;
 
-  protected AbstractConverter converter;
-  protected List<KesListener<T>> listeners = new ArrayList<>();
+  protected AbstractJooqConverter converter;
 
   public List<T> selectAll() {
     System.out.println("call to DB");
     return converter.convertIterableFromDB(selectAllRecords());
-  }
-
-  public void registerListener(final KesListener<T> listener) {
-    listeners.add(listener);
   }
 
   protected Iterable<Record> selectAllRecords() {

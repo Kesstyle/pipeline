@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import static by.minsk.kes.jooq.persistence.tables.Event.EVENT;
 
 @Component
-public class EventConverter extends AbstractConverter<KesEvent> {
+public class EventConverter extends AbstractJooqConverter<KesEvent> {
 
     public KesEvent convertFromDB(final Record record) {
         if (record == null) {

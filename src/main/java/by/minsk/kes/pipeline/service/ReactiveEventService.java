@@ -9,6 +9,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class ReactiveEventService {
     private EventDao eventDao;
 
     public Flux<KesEvent> getAllEventsInf() {
-        final Flux<KesEvent> existing = Flux.fromIterable(eventDao.selectAll());
+        final Flux<KesEvent> existing = Flux.fromIterable(eventDao.selectAll()).delayElements(Duration.ofMillis(500));
         return existing.mergeWith(Flux.create(emitter -> {
             final KesListener<KesEvent> listener = emitter::next;
             eventDao.registerListener(listener);

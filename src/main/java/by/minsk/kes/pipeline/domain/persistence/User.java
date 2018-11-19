@@ -14,61 +14,66 @@ import javax.persistence.Table;
 @Table(schema = "public", name = "users")
 public class User {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_counter")
-  @SequenceGenerator(name = "users_counter", sequenceName = "users_counter_seq", allocationSize = 1)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_counter")
+    @SequenceGenerator(name = "users_counter", sequenceName = "users_counter_seq", allocationSize = 1)
+    private Long id;
 
-  @Column
-  private String name;
+    private String name;
+    private String email;
+    private String active;
 
-  @Column
-  private String email;
+    @Column(name = "last_read_id")
+    private Long lastReadId;
 
-  @Column
-  @NaturalId
-  private String token;
+    @NaturalId
+    private String token;
 
-  @Column
-  private String active;
+    public Long getId() {
+        return id;
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public void setId(final Long id) {
+        this.id = id;
+    }
 
-  public void setId(final Long id) {
-    this.id = id;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public void setName(final String name) {
+        this.name = name;
+    }
 
-  public void setName(final String name) {
-    this.name = name;
-  }
+    public String getEmail() {
+        return email;
+    }
 
-  public String getEmail() {
-    return email;
-  }
+    public void setEmail(final String email) {
+        this.email = email;
+    }
 
-  public void setEmail(final String email) {
-    this.email = email;
-  }
+    public String getToken() {
+        return token;
+    }
 
-  public String getToken() {
-    return token;
-  }
+    public void setToken(final String token) {
+        this.token = token;
+    }
 
-  public void setToken(final String token) {
-    this.token = token;
-  }
+    public String getActive() {
+        return active;
+    }
 
-  public String getActive() {
-    return active;
-  }
+    public void setActive(final String active) {
+        this.active = active;
+    }
 
-  public void setActive(final String active) {
-    this.active = active;
-  }
+    public Long getLastReadId() {
+        return lastReadId;
+    }
+
+    public void setLastReadId(final Long lastReadId) {
+        this.lastReadId = lastReadId;
+    }
 }

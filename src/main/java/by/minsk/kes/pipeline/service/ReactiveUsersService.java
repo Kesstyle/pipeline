@@ -1,12 +1,15 @@
 package by.minsk.kes.pipeline.service;
 
 import by.minsk.kes.pipeline.domain.UiUser;
+import by.minsk.kes.pipeline.domain.UiUserWatch;
 import by.minsk.kes.pipeline.domain.persistence.User;
+import by.minsk.kes.pipeline.listener.KesListener;
+import by.minsk.kes.pipeline.persistence.converter.UserConverter;
 import by.minsk.kes.pipeline.persistence.dao.hibernate.UsersDao;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.FluxSink;
 import reactor.core.publisher.Mono;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,46 +18,40 @@ import java.time.Duration;
 @Service
 public class ReactiveUsersService {
 
-  @Autowired
-  private UsersDao usersDao;
+    @Autowired
+    private UsersDao usersDao;
 
-  public Flux<UiUser> getAllUsers() {
-    return Flux.fromIterable(usersDao.getAllUsers())
-        .map(this::convertToUiModel)
-        .delayElements(Duration.ofSeconds(4));
-  }
+    @Autowired
+    private UserConverter userConverter;
 
-  public Mono<UiUser> getUserByToken(final Mono<String> token) {
-    return Mono.from(token)
-        .map(usersDao::getUserByToken)
-        .map(this::convertToUiModel)
-        .onErrorResume(t -> Mono.empty());
-  }
-
-  public Mono<String> insertUser(final Mono<UiUser> users) {
-    return Mono.from(users)
-        .map(this::convertToDbModel)
-        .map(usersDao::insertUser)
-        .map(u -> u.getToken());
-  }
-
-  private UiUser convertToUiModel(final User user) {
-    final UiUser uiUser = new UiUser();
-    BeanUtils.copyProperties(user, uiUser);
-    if (user.getActive() != null && user.getActive().equalsIgnoreCase("Y")) {
-      uiUser.setActive(true);
+    public Flux<UiUser> getAllUsers() {
+        final Flux<UiUser> existingUsers = Flux.fromIterable(usersDao.getAllUsers())
+                .map(userConverter::convertToUiModel)
+                .delayElements(Duration.ofSeconds(1));
+        return existingUsers.mergeWith(Flux.create(emitter -> {
+            final KesListener<User> listener = u -> emitter.next(userConverter.convertToUiModel(u));
+            usersDao.registerListener(listener);
+        }, FluxSink.OverflowStrategy.BUFFER));
     }
-    return uiUser;
-  }
 
-  private User convertToDbModel(final UiUser user) {
-    final User dbUser = new User();
-    BeanUtils.copyProperties(user, dbUser);
-    if (user.isActive()) {
-      dbUser.setActive("Y");
-    } else {
-      dbUser.setActive("N");
+    public Mono<UiUser> getUserByToken(final Mono<String> token) {
+        return Mono.from(token)
+                .map(usersDao::getUserByToken)
+                .map(userConverter::convertToUiModel)
+                .onErrorResume(t -> Mono.empty());
     }
-    return dbUser;
-  }
+
+    public Mono<String> insertUser(final Mono<UiUser> users) {
+        return Mono.from(users)
+                .map(userConverter::convertToDbModel)
+                .map(usersDao::insertUser)
+                .map(u -> u.getToken());
+    }
+
+    public Mono<UiUser> updateLastReadId(final Mono<UiUser> user) {
+        return Mono.from(user)
+                .map(userConverter::convertToDbModel)
+                .map(u -> usersDao.updateLastRead(u.getId(), u.getLastReadId()))
+                .map(userConverter::convertToUiModel);
+    }
 }

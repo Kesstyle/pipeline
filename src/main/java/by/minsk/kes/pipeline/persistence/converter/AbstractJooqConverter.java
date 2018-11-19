@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Component
-public abstract class AbstractConverter<T> {
+public abstract class AbstractJooqConverter<T> {
 
     private static final String DATE_FORMAT = "yyyy-MM-dd ";
 

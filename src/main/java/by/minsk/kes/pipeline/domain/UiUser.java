@@ -1,62 +1,59 @@
 package by.minsk.kes.pipeline.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class UiUser {
 
-  @JsonProperty
-  private Long id;
+    private Long id;
+    private String name;
+    private String email;
+    private String token;
+    private boolean active;
+    private Long lastReadId;
 
-  @JsonProperty
-  private String name;
+    public Long getId() {
+        return id;
+    }
 
-  @JsonProperty
-  private String email;
+    public void setId(final Long id) {
+        this.id = id;
+    }
 
-  @JsonProperty
-  private String token;
+    public String getName() {
+        return name;
+    }
 
-  @JsonProperty
-  private boolean active;
+    public void setName(final String name) {
+        this.name = name;
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public String getEmail() {
+        return email;
+    }
 
-  public void setId(final Long id) {
-    this.id = id;
-  }
+    public void setEmail(final String email) {
+        this.email = email;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getToken() {
+        return token;
+    }
 
-  public void setName(final String name) {
-    this.name = name;
-  }
+    public void setToken(final String token) {
+        this.token = token;
+    }
 
-  public String getEmail() {
-    return email;
-  }
+    public boolean isActive() {
+        return active;
+    }
 
-  public void setEmail(final String email) {
-    this.email = email;
-  }
+    public void setActive(final boolean active) {
+        this.active = active;
+    }
 
-  public String getToken() {
-    return token;
-  }
+    public Long getLastReadId() {
+        return lastReadId;
+    }
 
-  public void setToken(final String token) {
-    this.token = token;
-  }
-
-  public boolean isActive() {
-    return active;
-  }
-
-  public void setActive(final boolean active) {
-    this.active = active;
-
-  }
+    public void setLastReadId(final Long lastReadId) {
+        this.lastReadId = lastReadId;
+    }
 }
